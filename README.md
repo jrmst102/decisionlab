@@ -98,7 +98,7 @@ app/
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | jm10697@nyu.edu | LimeKoala1! |
-| Professor | jose.mendoza@icloud.com | LimeKoala1! |
+| Professor | josermendoza@icloud.com | LimeKoala1! |
 | Students | See `docs/classlist.csv` | Per classlist |
 
 ### Docker Compose (Full Stack)

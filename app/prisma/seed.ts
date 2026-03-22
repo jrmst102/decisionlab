@@ -9,7 +9,7 @@ const prisma = new PrismaClient({ adapter });
 // Classlist data
 const classlist = [
   { firstName: "Jose", lastName: "Mendoza", email: "jm10697@nyu.edu", password: "LimeKoala1!", role: "ADMIN" as const },
-  { firstName: "Jose", lastName: "Mendoza", email: "jose.mendoza@icloud.com", password: "LimeKoala1!", role: "PROFESSOR" as const },
+  { firstName: "Jose", lastName: "Mendoza", email: "josermendoza@icloud.com", password: "LimeKoala1!", role: "PROFESSOR" as const },
   { firstName: "Montserrat", lastName: "Avila Muñoz", email: "ma9876@nyu.edu", password: "RedLion1", role: "STUDENT" as const },
   { firstName: "Carlos", lastName: "Bernal", email: "cab10151@nyu.edu", password: "BlueTiger2", role: "STUDENT" as const },
   { firstName: "Annika", lastName: "Brown", email: "anb6060@nyu.edu", password: "GreenBear3", role: "STUDENT" as const },
@@ -148,7 +148,7 @@ async function main() {
   }
 
   // Create demo course (professor is the icloud account or the nyu admin — use admin as professor for the course)
-  const professorUser = users["jose.mendoza@icloud.com"] || users["jm10697@nyu.edu"];
+  const professorUser = users["josermendoza@icloud.com"] || users["jm10697@nyu.edu"];
   const course = await prisma.course.upsert({
     where: {
       id: (
@@ -207,7 +207,7 @@ async function main() {
   console.log("\n✅ Seed complete!\n");
   console.log("Login credentials:");
   console.log("  Admin:     jm10697@nyu.edu / LimeKoala1!");
-  console.log("  Professor: jose.mendoza@icloud.com / LimeKoala1!");
+  console.log("  Professor: josermendoza@icloud.com / LimeKoala1!");
   console.log(`  Students:  ${students.length} students seeded (see classlist.csv for passwords)`);
 }
 
