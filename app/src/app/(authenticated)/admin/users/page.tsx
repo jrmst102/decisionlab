@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Search, Plus, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, Plus, X, ChevronLeft, ChevronRight, Pencil } from "lucide-react";
 
 interface User {
   id: string;
@@ -20,6 +20,7 @@ export default function AdminUsersPage() {
   const [search, setSearch] = useState("");
   const [roleFilter, setRoleFilter] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [editUser, setEditUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   // Create form state
@@ -31,6 +32,17 @@ export default function AdminUsersPage() {
     role: "STUDENT",
   });
   const [formError, setFormError] = useState("");
+
+  // Edit form state
+  const [editForm, setEditForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    role: "",
+    password: "",
+  });
+  const [editError, setEditError] = useState("");
+  const [editSaving, setEditSaving] = useState(false);
 
   const limit = 20;
 
@@ -88,6 +100,53 @@ export default function AdminUsersPage() {
       body: JSON.stringify({ isActive: !isActive }),
     });
     fetchUsers();
+  };
+
+  const openEdit = (u: User) => {
+    setEditUser(u);
+    setEditForm({
+      firstName: u.firstName,
+      lastName: u.lastName,
+      email: u.email,
+      role: u.role,
+      password: "",
+    });
+    setEditError("");
+  };
+
+  const handleEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editUser) return;
+    setEditSaving(true);
+    setEditError("");
+
+    const body: Record<string, string> = {};
+    if (editForm.firstName !== editUser.firstName) body.firstName = editForm.firstName;
+    if (editForm.lastName !== editUser.lastName) body.lastName = editForm.lastName;
+    if (editForm.email !== editUser.email) body.email = editForm.email;
+    if (editForm.role !== editUser.role) body.role = editForm.role;
+    if (editForm.password) body.password = editForm.password;
+
+    if (Object.keys(body).length === 0) {
+      setEditUser(null);
+      setEditSaving(false);
+      return;
+    }
+
+    const res = await fetch(`/api/users/${editUser.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      setEditError(data.error || "Failed to update user");
+    } else {
+      setEditUser(null);
+      fetchUsers();
+    }
+    setEditSaving(false);
   };
 
   const totalPages = Math.ceil(total / limit);
@@ -205,12 +264,21 @@ export default function AdminUsersPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <button
-                        onClick={() => toggleActive(u.id, u.isActive)}
-                        className="text-sm text-nyu-violet hover:text-nyu-ultra-violet font-medium"
-                      >
-                        {u.isActive ? "Deactivate" : "Activate"}
-                      </button>
+                      <div className="flex items-center justify-end gap-3">
+                        <button
+                          onClick={() => openEdit(u)}
+                          className="text-sm text-nyu-violet hover:text-nyu-ultra-violet font-medium inline-flex items-center gap-1"
+                        >
+                          <Pencil className="h-3.5 w-3.5" />
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => toggleActive(u.id, u.isActive)}
+                          className="text-sm text-nyu-violet hover:text-nyu-ultra-violet font-medium"
+                        >
+                          {u.isActive ? "Deactivate" : "Activate"}
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -361,6 +429,127 @@ export default function AdminUsersPage() {
                   className="px-4 py-2 bg-nyu-violet text-white rounded-lg text-sm font-medium hover:bg-nyu-ultra-violet transition-colors"
                 >
                   Create User
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit User Modal */}
+      {editUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-4">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-nyu-border">
+              <h2 className="font-semibold text-nyu-black">Edit User</h2>
+              <button
+                onClick={() => setEditUser(null)}
+                className="text-nyu-gray hover:text-nyu-black"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleEdit} className="p-6 space-y-4">
+              {editError && (
+                <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
+                  {editError}
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-nyu-gray mb-1">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editForm.firstName}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, firstName: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-nyu-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-nyu-violet"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-nyu-gray mb-1">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={editForm.lastName}
+                    onChange={(e) =>
+                      setEditForm({ ...editForm, lastName: e.target.value })
+                    }
+                    className="w-full px-3 py-2 border border-nyu-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-nyu-violet"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-nyu-gray mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  required
+                  value={editForm.email}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, email: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-nyu-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-nyu-violet"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-nyu-gray mb-1">
+                  Role
+                </label>
+                <select
+                  value={editForm.role}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, role: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-nyu-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-nyu-violet bg-white"
+                >
+                  <option value="STUDENT">Student</option>
+                  <option value="PROFESSOR">Professor</option>
+                  <option value="ADMIN">Admin</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-nyu-gray mb-1">
+                  New Password{" "}
+                  <span className="text-nyu-gray font-normal">(leave blank to keep current)</span>
+                </label>
+                <input
+                  type="password"
+                  value={editForm.password}
+                  onChange={(e) =>
+                    setEditForm({ ...editForm, password: e.target.value })
+                  }
+                  placeholder="••••••••"
+                  className="w-full px-3 py-2 border border-nyu-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-nyu-violet"
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditUser(null)}
+                  className="px-4 py-2 text-sm font-medium text-nyu-gray hover:text-nyu-black"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={editSaving}
+                  className="px-4 py-2 bg-nyu-violet text-white rounded-lg text-sm font-medium hover:bg-nyu-ultra-violet transition-colors disabled:opacity-50"
+                >
+                  {editSaving ? "Saving…" : "Save Changes"}
                 </button>
               </div>
             </form>

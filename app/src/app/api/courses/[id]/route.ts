@@ -101,3 +101,27 @@ export async function PUT(
     );
   }
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const session = await getSession();
+  if (!session || session.role !== "ADMIN") {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
+
+  const { id } = await params;
+
+  const course = await prisma.course.findUnique({ where: { id } });
+  if (!course) {
+    return NextResponse.json({ error: "Course not found" }, { status: 404 });
+  }
+
+  // Delete enrollments and tool assignments first, then the course
+  await prisma.courseEnrollment.deleteMany({ where: { courseId: id } });
+  await prisma.courseToolAssignment.deleteMany({ where: { courseId: id } });
+  await prisma.course.delete({ where: { id } });
+
+  return NextResponse.json({ success: true });
+}
