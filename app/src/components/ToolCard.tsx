@@ -67,14 +67,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
       }
 
       const data = await res.json();
-
-      if (data.authMethod === "IFRAME") {
-        // For iframe tools, open in new tab for now
-        window.open(data.toolUrl, "_blank", "noopener,noreferrer");
-      } else {
-        // Redirect with SSO token
-        window.open(data.launchUrl, "_blank", "noopener,noreferrer");
-      }
+      window.open(data.launchUrl, "_blank", "noopener,noreferrer");
     } catch (err) {
       console.error("Launch error:", err);
     } finally {

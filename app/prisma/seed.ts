@@ -66,11 +66,11 @@ async function main() {
 
   // Create school
   const school = await prisma.school.upsert({
-    where: { code: "STERN" },
+    where: { code: "SPS" },
     update: {},
     create: {
-      name: "NYU Stern School of Business",
-      code: "STERN",
+      name: "NYU School of Professional Studies",
+      code: "SPS",
     },
   });
   console.log(`✓ School: ${school.name}`);
@@ -153,7 +153,7 @@ async function main() {
     where: {
       id: (
         await prisma.course.findFirst({
-          where: { code: "STRT-6000", semester: "Spring 2026" },
+          where: { code: "INTG1-GC1011", semester: "Spring 2026" },
         })
       )?.id || "00000000-0000-0000-0000-000000000000",
     },
@@ -162,7 +162,7 @@ async function main() {
       schoolId: school.id,
       professorId: professorUser.id,
       name: "Competitive Strategy",
-      code: "STRT-6000",
+      code: "INTG1-GC1011",
       semester: "Spring 2026",
       startDate: new Date("2026-01-15"),
       endDate: new Date("2026-05-15"),
@@ -185,6 +185,7 @@ async function main() {
     });
   }
   console.log(`✓ Enrolled ${students.length} students in ${course.code}`);
+
 
   // Assign active tools to course
   const activeTools = await prisma.tool.findMany({

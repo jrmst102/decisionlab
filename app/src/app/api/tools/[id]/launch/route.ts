@@ -26,15 +26,11 @@ export async function POST(
   );
 
   // Build launch URL based on auth method
-  let launchUrl = tool.url;
-  if (tool.authMethod === "REDIRECT" || tool.authMethod === "JWT_EXCHANGE") {
-    const separator = tool.url.includes("?") ? "&" : "?";
-    launchUrl = `${tool.url}${separator}sso_token=${ssoToken}`;
-  }
+  // For now, just forward to the tool's base URL until SSO is enabled on each tool
+  const launchUrl = tool.url;
 
   return NextResponse.json({
     launchUrl,
-    ssoToken,
     authMethod: tool.authMethod,
     toolUrl: tool.url,
   });

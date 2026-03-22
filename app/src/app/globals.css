@@ -17,4 +17,5 @@ body {
   background: var(--color-nyu-white);
   color: var(--color-nyu-black);
   font-family: var(--font-sans);
+  font-size: 14px;
 }
