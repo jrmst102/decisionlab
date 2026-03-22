@@ -95,7 +95,7 @@ async function main() {
     {
       name: "AHP Studio",
       slug: "ahp-studio",
-      url: "https://www.ahpstudio.com",
+      url: "https://ahpstudio.com",
       description:
         "Structured multi-criteria decision making through pairwise comparisons and priority analysis.",
       authMethod: "JWT_EXCHANGE" as const,
@@ -104,7 +104,7 @@ async function main() {
     {
       name: "Airlines Sim",
       slug: "airlines-sim",
-      url: "https://www.airlines-sim.com",
+      url: "https://airlines-sim.com",
       description:
         "Competitive airline industry simulation — manage pricing, capacity, and strategy across rounds.",
       authMethod: "REDIRECT" as const,
@@ -113,7 +113,7 @@ async function main() {
     {
       name: "Dynamic Pricing Sandbox",
       slug: "dynamic-pricing",
-      url: "https://www.pricingsandbox.com",
+      url: "https://pricingsandbox.com",
       description:
         "Real-time dynamic pricing simulation across four progressively challenging industry scenarios.",
       authMethod: "IFRAME" as const,
