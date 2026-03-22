@@ -46,13 +46,13 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: "Negotiation Sim",
     slug: "negotiation-sim",
-    url: "",
+    url: "https://negotiation.decisionlab.app",
     description:
       "AI-powered negotiation simulation with structured rounds, scoring rubric, and class session mode.",
-    authMethod: "TBD",
+    authMethod: "REDIRECT",
     icon: "Handshake",
     color: "#D97706",
-    available: false,
+    available: true,
   },
   {
     name: "Scenario Sim",

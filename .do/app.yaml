@@ -1,0 +1,70 @@
+# DigitalOcean App Platform Spec
+# https://docs.digitalocean.com/products/app-platform/reference/app-spec/
+#
+# Two services in one app:
+#   1. DecisionLab (Next.js)  — from jrmst102/decisionlab, source_dir /app
+#   2. Negotiation Sim (FastAPI) — from jrmst102/negotiationsim
+#
+# To deploy:  doctl apps create --spec .do/app.yaml
+# To update:  doctl apps update <app-id> --spec .do/app.yaml
+
+name: decisionlab
+
+services:
+  - name: app
+    github:
+      repo: jrmst102/decisionlab
+      branch: main
+      deploy_on_push: true
+    source_dir: /app
+    dockerfile_path: Dockerfile
+    http_port: 3000
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-1gb
+    routes:
+      - path: /
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        value: ${db.DATABASE_URL}
+      - key: JWT_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: TOOL_SSO_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: NODE_ENV
+        value: production
+
+  - name: negotiationsim
+    github:
+      repo: jrmst102/negotiationsim
+      branch: main
+      deploy_on_push: true
+    dockerfile_path: Dockerfile
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-1gb
+    routes:
+      - path: /negotiation
+    envs:
+      - key: SESSION_SECRET
+        scope: RUN_TIME
+        type: SECRET
+      - key: OPENAI_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: OPENAI_MODEL
+        value: gpt-4o-mini
+      - key: OPENAI_MAX_TOKENS
+        value: "2000"
+      - key: TOOL_SSO_SECRET
+        scope: RUN_TIME
+        type: SECRET
+
+databases:
+  - name: db
+    engine: PG
+    version: "16"
+    size: db-s-dev-database
+    num_nodes: 1

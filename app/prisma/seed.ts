@@ -122,11 +122,10 @@ async function main() {
     {
       name: "Negotiation Sim",
       slug: "negotiation-sim",
-      url: "",
+      url: "https://negotiation.decisionlab.app",
       description:
         "AI-powered negotiation simulation with structured rounds, scoring rubric, and class session mode.",
-      authMethod: "TBD" as const,
-      isActive: false,
+      authMethod: "REDIRECT" as const,
       sortOrder: 4,
     },
     {

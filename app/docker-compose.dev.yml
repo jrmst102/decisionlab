@@ -1,0 +1,28 @@
+# Local dev override — exposes ports directly (no Nginx/SSL)
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+services:
+  nginx:
+    profiles: ["disabled"]
+
+  certbot:
+    profiles: ["disabled"]
+
+  app:
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://decisionlab:decisionlab@db:5432/decisionlab
+      - JWT_SECRET=dev-jwt-secret-change-in-production
+      - TOOL_SSO_SECRET=dev-sso-secret-change-in-production
+
+  negotiationsim:
+    ports:
+      - "8080:8080"
+    environment:
+      - SESSION_SECRET=negotiation-sim-dev-secret
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-sk-placeholder}
+      - TOOL_SSO_SECRET=dev-sso-secret-change-in-production
+
+  db:
+    ports:
+      - "5432:5432"

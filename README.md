@@ -13,7 +13,7 @@ The Decision Making Lab consolidates six simulation tools under one platform wit
 | AHP Studio | Active | Analytic Hierarchy Process decision tool |
 | Airlines Sim | Active | Airline industry simulation |
 | Dynamic Pricing Sandbox | Active | Dynamic pricing strategy tool |
-| Negotiation Sim | Coming Soon | Negotiation simulation |
+| Negotiation Sim | Active | AI-powered negotiation simulation (FastAPI) |
 | Scenario Sim | Coming Soon | Scenario planning tool |
 | Decision Trees | Coming Soon | Decision tree analysis |
 
@@ -35,19 +35,22 @@ The Decision Making Lab consolidates six simulation tools under one platform wit
 ## Project Structure
 
 ```
-app/
-├── prisma/                  # Schema, migrations, seed script
+app/                             # DecisionLab portal (Next.js)
+├── prisma/                      # Schema, migrations, seed script
 ├── src/
-│   ├── app/                 # Next.js App Router pages & API routes
-│   │   ├── (authenticated)/ # Protected pages (dashboard, admin, courses, etc.)
-│   │   ├── api/             # REST API endpoints
-│   │   └── *.tsx            # Public pages (login, about, terms, etc.)
-│   ├── components/          # Shared UI components
-│   ├── generated/prisma/    # Generated Prisma client
-│   └── lib/                 # Auth, DB client, tool definitions
-├── .do/app.yaml             # DigitalOcean App Platform config
-├── Dockerfile               # Multi-stage Docker build
-└── docker-compose.yml       # Local development with Docker
+│   ├── app/                     # Next.js App Router pages & API routes
+│   │   ├── (authenticated)/     # Protected pages (dashboard, admin, courses, etc.)
+│   │   ├── api/                 # REST API endpoints
+│   │   └── *.tsx                # Public pages (login, about, terms, etc.)
+│   ├── components/              # Shared UI components
+│   ├── generated/prisma/        # Generated Prisma client
+│   └── lib/                     # Auth, DB client, tool definitions
+├── Dockerfile                   # Multi-stage Docker build
+└── docker-compose.yml           # Local development with Docker
+services/
+└── negotiationsim/              # Negotiation Sim (git submodule → jrmst102/negotiationsim)
+.do/app.yaml                     # DigitalOcean App Platform spec
+start.py                         # Local dev startup (both services)
 ```
 
 ## Getting Started
@@ -58,7 +61,9 @@ app/
 python3 start.py
 ```
 
-This handles everything: starts PostgreSQL (Docker), installs dependencies, runs migrations, seeds demo data, and launches the dev server.
+This handles everything: starts PostgreSQL (Docker), installs dependencies for both DecisionLab and Negotiation Sim, runs migrations, seeds demo data, and launches both services:
+- **DecisionLab** → http://localhost:3000
+- **Negotiation Sim** → http://localhost:8080
 
 ### Manual Setup
 
@@ -159,16 +164,23 @@ docker compose up --build
 
 ### DigitalOcean App Platform
 
-The app includes a `.do/app.yaml` spec for DigitalOcean deployment:
+The platform runs as two App Platform apps:
 
-```bash
-doctl apps create --spec app/.do/app.yaml
-```
+| App | Repo | Runtime |
+|-----|------|---------|
+| DecisionLab | `jrmst102/decisionlab` (source: `/app`) | Next.js / Docker |
+| Negotiation Sim | `jrmst102/negotiationsim` | FastAPI / Python buildpack |
 
-Set production environment variables:
+**DecisionLab** environment variables:
 - `DATABASE_URL` — Managed PostgreSQL connection string
 - `JWT_SECRET` — Strong random secret
 - `TOOL_SSO_SECRET` — Secret for tool SSO tokens
+
+**Negotiation Sim** environment variables:
+- `SESSION_SECRET` — Cookie signing secret
+- `OPENAI_API_KEY` — OpenAI API key (for AI counterpart)
+- `OPENAI_MODEL` — Model name (default: `gpt-4o-mini`)
+- `TOOL_SSO_SECRET` — Must match DecisionLab's value
 
 ### Manual Docker
 

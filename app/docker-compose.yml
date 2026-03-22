@@ -4,26 +4,39 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - DATABASE_URL=postgresql://decisionlab:decisionlab@db:5432/decisionlab
-      - JWT_SECRET=dev-jwt-secret-change-in-production
-      - TOOL_SSO_SECRET=dev-sso-secret-change-in-production
+      - DATABASE_URL=postgresql://${DB_USER:-decisionlab}:${DB_PASSWORD:-decisionlab}@db:5432/${DB_NAME:-decisionlab}
+      - JWT_SECRET=${JWT_SECRET:-dev-jwt-secret-change-in-production}
+      - TOOL_SSO_SECRET=${TOOL_SSO_SECRET:-dev-sso-secret-change-in-production}
       - NODE_ENV=production
     depends_on:
       db:
         condition: service_healthy
 
+  negotiationsim:
+    build:
+      context: ../services/negotiationsim
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SESSION_SECRET=${NEGOTIATION_SESSION_SECRET:-negotiation-sim-dev-secret}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4o-mini}
+      - OPENAI_MAX_TOKENS=${OPENAI_MAX_TOKENS:-2000}
+      - TOOL_SSO_SECRET=${TOOL_SSO_SECRET:-dev-sso-secret-change-in-production}
+
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: decisionlab
-      POSTGRES_USER: decisionlab
-      POSTGRES_PASSWORD: decisionlab
+      POSTGRES_DB: ${DB_NAME:-decisionlab}
+      POSTGRES_USER: ${DB_USER:-decisionlab}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-decisionlab}
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U decisionlab"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-decisionlab}"]
       interval: 5s
       timeout: 5s
       retries: 5

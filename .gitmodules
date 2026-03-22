@@ -1,0 +1,3 @@
+[submodule "services/negotiationsim"]
+	path = services/negotiationsim
+	url = git@github.com:jrmst102/negotiationsim.git

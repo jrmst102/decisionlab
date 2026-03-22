@@ -7,6 +7,7 @@ import time
 import os
 
 APP_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "app")
+NEGSIM_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "services", "negotiationsim")
 CONTAINER = "decisionlab-db"
 DB_USER = "decisionlab"
 DB_PASS = "decisionlab2026"
@@ -72,6 +73,15 @@ def install_deps():
         print("✓ Dependencies installed")
 
 
+def install_negsim_deps():
+    venv_dir = os.path.join(NEGSIM_DIR, ".venv")
+    if not os.path.isdir(venv_dir):
+        print("→ Setting up Negotiation Sim virtualenv...")
+        run("python3 -m venv .venv", cwd=NEGSIM_DIR)
+    run(".venv/bin/pip install -q -r requirements.txt", cwd=NEGSIM_DIR)
+    print("✓ Negotiation Sim dependencies installed")
+
+
 def run_migrations():
     print("→ Running database migrations...")
     run("npx prisma migrate deploy")
@@ -92,16 +102,28 @@ def seed_if_empty():
 
 
 def start_dev():
-    print("\n🚀 Starting dev server at http://localhost:3000\n")
+    print("\n🚀 Starting Negotiation Sim at http://localhost:8080")
+    negsim_proc = subprocess.Popen(
+        ".venv/bin/uvicorn web.main:app --host 0.0.0.0 --port 8080 --reload",
+        cwd=NEGSIM_DIR,
+        shell=True,
+    )
+
+    print("🚀 Starting DecisionLab at http://localhost:3000\n")
     try:
         run("npm run dev", check=False)
     except KeyboardInterrupt:
-        print("\n\nServer stopped.")
+        print("\n\nStopping servers...")
+    finally:
+        negsim_proc.terminate()
+        negsim_proc.wait()
+        print("Servers stopped.")
 
 
 if __name__ == "__main__":
     start_db()
     install_deps()
+    install_negsim_deps()
     run_migrations()
     seed_if_empty()
     start_dev()
