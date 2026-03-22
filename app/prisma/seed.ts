@@ -131,7 +131,7 @@ async function main() {
     {
       name: "Scenario Sim",
       slug: "scenario-sim",
-      url: "https://scenariomanager-placeholder.ondigitalocean.app",
+      url: "https://scenariomanager-6m53a.ondigitalocean.app",
       description:
         "Develop, analyze, and compare future scenarios for strategic decision making under uncertainty.",
       authMethod: "REDIRECT" as const,
