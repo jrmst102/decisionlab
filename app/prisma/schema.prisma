@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  PROFESSOR
+  STUDENT
+}
+
+enum AuthMethod {
+  JWT_EXCHANGE
+  REDIRECT
+  IFRAME
+  TBD
+}
+
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique @db.VarChar(255)
+  passwordHash  String   @map("password_hash") @db.VarChar(255)
+  firstName     String   @map("first_name") @db.VarChar(100)
+  lastName      String   @map("last_name") @db.VarChar(100)
+  role          Role     @default(STUDENT)
+  isActive      Boolean  @default(true) @map("is_active")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  enrollments   CourseEnrollment[]
+  taughtCourses Course[]           @relation("CourseProfessor")
+  toolAssignments UserToolAssignment[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model School {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @db.VarChar(255)
+  code      String   @unique @db.VarChar(20)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  courses   Course[]
+
+  @@map("schools")
+}
+
+model Course {
+  id          String    @id @default(uuid()) @db.Uuid
+  schoolId    String    @map("school_id") @db.Uuid
+  professorId String    @map("professor_id") @db.Uuid
+  name        String    @db.VarChar(255)
+  code        String    @db.VarChar(20)
+  semester    String    @db.VarChar(20)
+  startDate   DateTime? @map("start_date") @db.Date
+  endDate     DateTime? @map("end_date") @db.Date
+  isActive    Boolean   @default(true) @map("is_active")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  school      School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  professor   User      @relation("CourseProfessor", fields: [professorId], references: [id])
+  enrollments CourseEnrollment[]
+  toolAssignments CourseToolAssignment[]
+
+  @@map("courses")
+}
+
+model Tool {
+  id          String     @id @default(uuid()) @db.Uuid
+  name        String     @db.VarChar(100)
+  slug        String     @unique @db.VarChar(50)
+  url         String     @db.VarChar(500)
+  iconPath    String?    @map("icon_path") @db.VarChar(255)
+  description String?    @db.Text
+  authMethod  AuthMethod @default(TBD) @map("auth_method")
+  isActive    Boolean    @default(true) @map("is_active")
+  sortOrder   Int        @default(0) @map("sort_order")
+  createdAt   DateTime   @default(now()) @map("created_at")
+
+  courseAssignments CourseToolAssignment[]
+  userAssignments  UserToolAssignment[]
+
+  @@map("tools")
+}
+
+model CourseEnrollment {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  courseId   String   @map("course_id") @db.Uuid
+  enrolledAt DateTime @default(now()) @map("enrolled_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+  @@map("course_enrollments")
+}
+
+model CourseToolAssignment {
+  id        String   @id @default(uuid()) @db.Uuid
+  courseId   String   @map("course_id") @db.Uuid
+  toolId    String   @map("tool_id") @db.Uuid
+  assignedAt DateTime @default(now()) @map("assigned_at")
+
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  tool      Tool     @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, toolId])
+  @@map("course_tool_assignments")
+}
+
+model UserToolAssignment {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  toolId    String   @map("tool_id") @db.Uuid
+  assignedAt DateTime @default(now()) @map("assigned_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tool      Tool     @relation(fields: [toolId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, toolId])
+  @@map("user_tool_assignments")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  action    String   @db.VarChar(100)
+  entity    String   @db.VarChar(50)
+  entityId  String?  @map("entity_id") @db.Uuid
+  details   String?  @db.Text
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
+}

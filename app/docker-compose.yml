@@ -1,0 +1,32 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://decisionlab:decisionlab@db:5432/decisionlab
+      - JWT_SECRET=dev-jwt-secret-change-in-production
+      - TOOL_SSO_SECRET=dev-sso-secret-change-in-production
+      - NODE_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: decisionlab
+      POSTGRES_USER: decisionlab
+      POSTGRES_PASSWORD: decisionlab
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U decisionlab"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

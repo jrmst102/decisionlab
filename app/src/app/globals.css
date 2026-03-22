@@ -1,0 +1,20 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-nyu-violet: #57068C;
+  --color-nyu-ultra-violet: #8900E1;
+  --color-nyu-dark-violet: #330662;
+  --color-nyu-light-violet: #EEE6F3;
+  --color-nyu-white: #FFFFFF;
+  --color-nyu-black: #000000;
+  --color-nyu-gray: #404040;
+  --color-nyu-light-gray: #F5F5F5;
+  --color-nyu-border: #E5E7EB;
+  --font-sans: "Montserrat", "Verdana", system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-nyu-white);
+  color: var(--color-nyu-black);
+  font-family: var(--font-sans);
+}
