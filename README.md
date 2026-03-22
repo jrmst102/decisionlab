@@ -1,21 +1,21 @@
 # Decision Making Lab
 
-A web portal providing unified SSO access to decision-making and strategy simulation tools for academic courses. Built for NYU Stern's Competitive Strategy program by Dr. Jose Mendoza.
+A web portal providing unified access to decision-making and strategy simulation tools for academic courses. Built for NYU School of Professional Studies by [Dr. Jose Mendoza](https://www.jose-mendoza.com).
 
 ## Overview
 
-The Decision Making Lab consolidates six simulation tools under one platform with role-based access control, course management, and centralized tool launching via SSO.
+The Decision Making Lab consolidates six simulation tools under one platform with role-based access control, course management, and centralized tool launching.
 
 ### Lab Tools
 
-| Tool | Status | URL | Auth Method |
-|------|--------|-----|-------------|
-| AHP Studio | Active | ahpstudio.com | JWT Exchange |
-| Airlines Sim | Active | airlines-sim.com | Redirect |
-| Dynamic Pricing Sandbox | Active | pricingsandbox.com | Iframe |
-| Negotiation Sim | Coming Soon | — | TBD |
-| Scenario Sim | Coming Soon | — | TBD |
-| Decision Trees | Coming Soon | — | TBD |
+| Tool | Status | Description |
+|------|--------|-------------|
+| AHP Studio | Active | Analytic Hierarchy Process decision tool |
+| Airlines Sim | Active | Airline industry simulation |
+| Dynamic Pricing Sandbox | Active | Dynamic pricing strategy tool |
+| Negotiation Sim | Coming Soon | Negotiation simulation |
+| Scenario Sim | Coming Soon | Scenario planning tool |
+| Decision Trees | Coming Soon | Decision tree analysis |
 
 ### User Roles
 
@@ -52,12 +52,22 @@ app/
 
 ## Getting Started
 
-### Prerequisites
+### Quick Start
+
+```bash
+python3 start.py
+```
+
+This handles everything: starts PostgreSQL (Docker), installs dependencies, runs migrations, seeds demo data, and launches the dev server.
+
+### Manual Setup
+
+#### Prerequisites
 
 - Node.js 20+
 - PostgreSQL 16 (or Docker)
 
-### Local Development
+#### Steps
 
 1. **Clone and install:**
    ```bash
@@ -108,6 +118,24 @@ cd app
 docker compose up --build
 ```
 
+## Features
+
+### Admin Dashboard (`/admin`)
+- **Users** — Create, edit (name, email, password, role), activate/deactivate
+- **Courses** — Create, edit, delete courses
+- **Schools** — Add and remove schools
+- **Tools** — Manage simulation tools
+
+### Course Management (`/manage/courses/[id]`)
+- View course details (code, school, semester, professor)
+- Add/remove students with search
+- Assign/unassign tools via checkbox editor
+
+### Student Experience (`/dashboard`)
+- View enrolled courses
+- Launch assigned tools
+- Profile management
+
 ## API Endpoints
 
 | Method | Path | Description |
@@ -116,15 +144,16 @@ docker compose up --build
 | POST | `/api/auth/logout` | Clear session |
 | GET | `/api/auth/me` | Current user info |
 | GET/POST | `/api/users` | List/create users (admin) |
-| GET/PUT/DELETE | `/api/users/[id]` | User CRUD (admin) |
+| GET/PUT/DELETE | `/api/users/[id]` | User CRUD |
 | GET/POST | `/api/courses` | List/create courses |
-| GET/PUT | `/api/courses/[id]` | Course details/update |
-| POST | `/api/courses/[id]/enroll` | Bulk enroll students |
+| GET/PUT/DELETE | `/api/courses/[id]` | Course CRUD |
+| POST/DELETE | `/api/courses/[id]/enroll` | Add/remove students |
 | POST | `/api/courses/[id]/tools` | Assign tools to course |
+| GET/POST | `/api/schools` | List/create schools (admin) |
+| DELETE | `/api/schools/[id]` | Delete school (admin) |
 | GET | `/api/tools` | List all active tools |
 | GET | `/api/tools/assigned` | User's assigned tools |
-| POST | `/api/tools/[id]/launch` | Generate SSO token & launch URL |
-| GET/POST | `/api/schools` | List/create schools (admin) |
+| POST | `/api/tools/[id]/launch` | Generate launch URL |
 
 ## Deployment
 
@@ -156,6 +185,7 @@ docker run -p 3000:3000 \
 
 | Command | Description |
 |---------|-------------|
+| `python3 start.py` | Full setup & launch (recommended) |
 | `npm run dev` | Start dev server |
 | `npm run build` | Production build |
 | `npm start` | Start production server |
@@ -164,6 +194,10 @@ docker run -p 3000:3000 \
 | `npm run db:push` | Push schema to DB (no migration) |
 | `npm run db:seed` | Seed demo data |
 | `npm run db:studio` | Open Prisma Studio |
+
+## Contact
+
+Dr. Jose Mendoza — [jose.mendoza@nyu.edu](mailto:jose.mendoza@nyu.edu) — [www.jose-mendoza.com](https://www.jose-mendoza.com)
 
 ## License
 
