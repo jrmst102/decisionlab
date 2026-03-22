@@ -4,8 +4,14 @@ import pg from "pg";
 import bcryptjs from "bcryptjs";
 import "dotenv/config";
 
+function stripSslMode(url: string): string {
+  const u = new URL(url);
+  u.searchParams.delete("sslmode");
+  return u.toString();
+}
+
 const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL!,
+  connectionString: stripSslMode(process.env.DATABASE_URL!),
   ssl: { rejectUnauthorized: false },
 });
 const adapter = new PrismaPg(pool as unknown as ConstructorParameters<typeof PrismaPg>[0]);
