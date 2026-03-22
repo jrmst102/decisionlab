@@ -18,10 +18,10 @@ export default function ContactPage() {
           <div className="flex items-center gap-3 text-nyu-black">
             <Mail className="h-5 w-5 text-nyu-violet" />
             <a
-              href="mailto:decisionlab@nyu.edu"
+              href="mailto:jose.mendoza@nyu.edu"
               className="text-nyu-violet hover:text-nyu-ultra-violet font-medium"
             >
-              decisionlab@nyu.edu
+              jose.mendoza@nyu.edu
             </a>
           </div>
         </div>

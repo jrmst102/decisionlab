@@ -36,8 +36,15 @@ export default function AboutPage() {
         </h2>
         <p>
           The Decision Making Lab was created by{" "}
-          <strong className="text-nyu-black">Dr. Jose Mendoza</strong> for
-          use in Competitive Strategy courses. The platform reflects a
+          <a
+            href="https://www.jose-mendoza.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-nyu-violet hover:text-nyu-ultra-violet font-semibold"
+          >
+            Dr. Jose Mendoza
+          </a>{" "}
+          for use in Competitive Strategy courses. The platform reflects a
           commitment to experiential learning through interactive, technology-driven
           exercises that complement traditional classroom instruction.
         </p>

@@ -6,53 +6,63 @@ import "dotenv/config";
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL! });
 const prisma = new PrismaClient({ adapter });
 
+// Classlist data
+const classlist = [
+  { firstName: "Jose", lastName: "Mendoza", email: "jm10697@nyu.edu", password: "LimeKoala1!", role: "ADMIN" as const },
+  { firstName: "Jose", lastName: "Mendoza", email: "jose.mendoza@icloud.com", password: "LimeKoala1!", role: "PROFESSOR" as const },
+  { firstName: "Montserrat", lastName: "Avila Muñoz", email: "ma9876@nyu.edu", password: "RedLion1", role: "STUDENT" as const },
+  { firstName: "Carlos", lastName: "Bernal", email: "cab10151@nyu.edu", password: "BlueTiger2", role: "STUDENT" as const },
+  { firstName: "Annika", lastName: "Brown", email: "anb6060@nyu.edu", password: "GreenBear3", role: "STUDENT" as const },
+  { firstName: "Valerie", lastName: "Cadena", email: "vac340@nyu.edu", password: "YellowWolf4", role: "STUDENT" as const },
+  { firstName: "Juan Pablo", lastName: "Cajiga Gordillo", email: "jcg533@nyu.edu", password: "OrangeDeer5", role: "STUDENT" as const },
+  { firstName: "Charlotte", lastName: "Detwiler", email: "cd4020@nyu.edu", password: "PurpleEagle6", role: "STUDENT" as const },
+  { firstName: "Chris", lastName: "Dillmeier", email: "cwd8685@nyu.edu", password: "WhiteFox7", role: "STUDENT" as const },
+  { firstName: "Xuke", lastName: "Feng", email: "xf931@nyu.edu", password: "BlackHawk8", role: "STUDENT" as const },
+  { firstName: "Keri", lastName: "Kaleja", email: "kk5887@nyu.edu", password: "SilverLynx9", role: "STUDENT" as const },
+  { firstName: "Hallie", lastName: "Lau", email: "hl6614@nyu.edu", password: "GoldPanda1", role: "STUDENT" as const },
+  { firstName: "Natalie", lastName: "Lee", email: "nl3125@nyu.edu", password: "BrownOtter2", role: "STUDENT" as const },
+  { firstName: "Jiayi", lastName: "Li", email: "jl17781@nyu.edu", password: "TealRaven3", role: "STUDENT" as const },
+  { firstName: "Xinjue", lastName: "Li", email: "xl6160@nyu.edu", password: "PinkShark4", role: "STUDENT" as const },
+  { firstName: "Cheryl", lastName: "Liang", email: "chl6920@nyu.edu", password: "GrayWhale5", role: "STUDENT" as const },
+  { firstName: "Weilin", lastName: "Liang", email: "wl3557@nyu.edu", password: "VioletZebra6", role: "STUDENT" as const },
+  { firstName: "Camila", lastName: "Lievano", email: "mcl9746@nyu.edu", password: "IndigoSwan7", role: "STUDENT" as const },
+  { firstName: "Skylar", lastName: "Lin", email: "rl5858@nyu.edu", password: "MaroonOwl8", role: "STUDENT" as const },
+  { firstName: "Juliana", lastName: "Martinez Aparicio", email: "jm11756@nyu.edu", password: "NavyFalcon9", role: "STUDENT" as const },
+  { firstName: "Kristen", lastName: "Miao", email: "jm11696@nyu.edu", password: "AquaDolphin2", role: "STUDENT" as const },
+  { firstName: "Vanessa Cibelle", lastName: "Moura Caxias", email: "vm2806@nyu.edu", password: "CoralCheetah3", role: "STUDENT" as const },
+  { firstName: "Jiaying", lastName: "Pan", email: "jp7862@nyu.edu", password: "BeigeBadger4", role: "STUDENT" as const },
+  { firstName: "Sasha", lastName: "Rachmadi", email: "sfr9778@nyu.edu", password: "CyanCobra5", role: "STUDENT" as const },
+  { firstName: "Lanie", lastName: "Veazey", email: "lmv9494@nyu.edu", password: "OliveOcelot7", role: "STUDENT" as const },
+  { firstName: "Senette", lastName: "Wiah", email: "sw7168@nyu.edu", password: "MagentaMoose6", role: "STUDENT" as const },
+  { firstName: "Fangyuan", lastName: "Zheng", email: "fz2481@nyu.edu", password: "PeachPython8", role: "STUDENT" as const },
+  { firstName: "Haihua", lastName: "Zhu", email: "hz4386@nyu.edu", password: "RubyRhino9", role: "STUDENT" as const },
+];
+
 async function main() {
   console.log("🌱 Seeding database...\n");
 
-  // Create admin user
-  const adminPassword = await bcryptjs.hash("AdminPass2026!", 12);
-  const admin = await prisma.user.upsert({
-    where: { email: "admin@decisionlab.com" },
-    update: {},
-    create: {
-      email: "admin@decisionlab.com",
-      passwordHash: adminPassword,
-      firstName: "Admin",
-      lastName: "User",
-      role: "ADMIN",
-    },
-  });
-  console.log(`✓ Admin user: ${admin.email}`);
+  // Create all users from classlist
+  const users: Record<string, { id: string; email: string; role: string }> = {};
+  for (const entry of classlist) {
+    const passwordHash = await bcryptjs.hash(entry.password, 12);
+    const user = await prisma.user.upsert({
+      where: { email: entry.email },
+      update: {},
+      create: {
+        email: entry.email,
+        passwordHash,
+        firstName: entry.firstName,
+        lastName: entry.lastName,
+        role: entry.role,
+      },
+    });
+    users[user.email] = { id: user.id, email: user.email, role: user.role };
+    const roleLabel = entry.role === "ADMIN" ? "Admin" : entry.role === "PROFESSOR" ? "Professor" : "Student";
+    console.log(`✓ ${roleLabel}: ${user.firstName} ${user.lastName} (${user.email})`);
+  }
 
-  // Create demo professor
-  const profPassword = await bcryptjs.hash("ProfPass2026!", 12);
-  const professor = await prisma.user.upsert({
-    where: { email: "professor@decisionlab.com" },
-    update: {},
-    create: {
-      email: "professor@decisionlab.com",
-      passwordHash: profPassword,
-      firstName: "Jose",
-      lastName: "Mendoza",
-      role: "PROFESSOR",
-    },
-  });
-  console.log(`✓ Professor: ${professor.email}`);
-
-  // Create demo student
-  const studentPassword = await bcryptjs.hash("StudentPass2026!", 12);
-  const student = await prisma.user.upsert({
-    where: { email: "student@decisionlab.com" },
-    update: {},
-    create: {
-      email: "student@decisionlab.com",
-      passwordHash: studentPassword,
-      firstName: "Demo",
-      lastName: "Student",
-      role: "STUDENT",
-    },
-  });
-  console.log(`✓ Student: ${student.email}`);
+  // Also create the admin alias (jose.mendoza@nyu.edu → jm10697@nyu.edu is the admin)
+  // The jm10697@nyu.edu account is the primary admin account
 
   // Create school
   const school = await prisma.school.upsert({
@@ -137,7 +147,8 @@ async function main() {
     );
   }
 
-  // Create demo course
+  // Create demo course (professor is the icloud account or the nyu admin — use admin as professor for the course)
+  const professorUser = users["jose.mendoza@icloud.com"] || users["jm10697@nyu.edu"];
   const course = await prisma.course.upsert({
     where: {
       id: (
@@ -149,7 +160,7 @@ async function main() {
     update: {},
     create: {
       schoolId: school.id,
-      professorId: professor.id,
+      professorId: professorUser.id,
       name: "Competitive Strategy",
       code: "STRT-6000",
       semester: "Spring 2026",
@@ -159,18 +170,21 @@ async function main() {
   });
   console.log(`✓ Course: ${course.name} (${course.code})`);
 
-  // Enroll student in course
-  await prisma.courseEnrollment.upsert({
-    where: {
-      userId_courseId: { userId: student.id, courseId: course.id },
-    },
-    update: {},
-    create: {
-      userId: student.id,
-      courseId: course.id,
-    },
-  });
-  console.log(`✓ Enrolled ${student.email} in ${course.code}`);
+  // Enroll all students in course
+  const students = Object.values(users).filter((u) => u.role === "STUDENT");
+  for (const student of students) {
+    await prisma.courseEnrollment.upsert({
+      where: {
+        userId_courseId: { userId: student.id, courseId: course.id },
+      },
+      update: {},
+      create: {
+        userId: student.id,
+        courseId: course.id,
+      },
+    });
+  }
+  console.log(`✓ Enrolled ${students.length} students in ${course.code}`);
 
   // Assign active tools to course
   const activeTools = await prisma.tool.findMany({
@@ -192,9 +206,9 @@ async function main() {
 
   console.log("\n✅ Seed complete!\n");
   console.log("Login credentials:");
-  console.log("  Admin:     admin@decisionlab.com / AdminPass2026!");
-  console.log("  Professor: professor@decisionlab.com / ProfPass2026!");
-  console.log("  Student:   student@decisionlab.com / StudentPass2026!");
+  console.log("  Admin:     jm10697@nyu.edu / LimeKoala1!");
+  console.log("  Professor: jose.mendoza@icloud.com / LimeKoala1!");
+  console.log(`  Students:  ${students.length} students seeded (see classlist.csv for passwords)`);
 }
 
 main()
