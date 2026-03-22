@@ -4,7 +4,7 @@ FROM node:20-alpine AS base
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
-RUN npm ci --only=production && cp -R node_modules /prod_node_modules
+RUN npm ci --omit=dev && cp -R node_modules /prod_node_modules
 RUN npm ci
 
 # Generate Prisma client
@@ -23,6 +23,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=prisma /app/src/generated ./src/generated
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV NODE_OPTIONS="--max-old-space-size=512"
 RUN npm run build
 
 # Production image
