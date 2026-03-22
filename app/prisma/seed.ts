@@ -131,11 +131,10 @@ async function main() {
     {
       name: "Scenario Sim",
       slug: "scenario-sim",
-      url: "",
+      url: "https://scenariomanager-placeholder.ondigitalocean.app",
       description:
         "Develop, analyze, and compare future scenarios for strategic decision making under uncertainty.",
-      authMethod: "TBD" as const,
-      isActive: false,
+      authMethod: "REDIRECT" as const,
       sortOrder: 5,
     },
     {

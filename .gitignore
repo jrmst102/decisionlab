@@ -1,5 +1,7 @@
 docs/classlist.csv
+docs/pricing.csv
 
 # SSH deploy keys
+.ssh/
 negotiations
 negotiations.pub

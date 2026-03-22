@@ -14,7 +14,7 @@ The Decision Making Lab consolidates six simulation tools under one platform wit
 | Airlines Sim | Active | Airline industry simulation |
 | Dynamic Pricing Sandbox | Active | Dynamic pricing strategy tool |
 | Negotiation Sim | Active | AI-powered negotiation simulation (FastAPI) |
-| Scenario Sim | Coming Soon | Scenario planning tool |
+| Scenario Sim | Active | Scenario planning tool (FastAPI) |
 | Decision Trees | Coming Soon | Decision tree analysis |
 
 ### User Roles
@@ -48,7 +48,8 @@ app/                             # DecisionLab portal (Next.js)
 ├── Dockerfile                   # Multi-stage Docker build
 └── docker-compose.yml           # Local development with Docker
 services/
-└── negotiationsim/              # Negotiation Sim (git submodule → jrmst102/negotiationsim)
+├── negotiationsim/              # Negotiation Sim (git submodule → jrmst102/negotiationsim)
+└── scenariomanager/             # Scenario Manager (git submodule → jrmst102/scenariomanager)
 .do/app.yaml                     # DigitalOcean App Platform spec
 start.py                         # Local dev startup (both services)
 ```
@@ -164,23 +165,28 @@ docker compose up --build
 
 ### DigitalOcean App Platform
 
-The platform runs as two App Platform apps:
+The platform runs as three App Platform apps:
 
 | App | Repo | Runtime |
 |-----|------|---------|
 | DecisionLab | `jrmst102/decisionlab` (source: `/app`) | Next.js / Docker |
 | Negotiation Sim | `jrmst102/negotiationsim` | FastAPI / Python buildpack |
+| Scenario Manager | `jrmst102/scenariomanager` | FastAPI / Docker |
 
 **DecisionLab** environment variables:
 - `DATABASE_URL` — Managed PostgreSQL connection string
 - `JWT_SECRET` — Strong random secret
-- `TOOL_SSO_SECRET` — Secret for tool SSO tokens
+- `TOOL_SSO_SECRET` — Shared SSO secret (used by Negotiation Sim)
+- `TOOL_SSO_SECRET_SCENARIO_SIM` — Per-tool SSO secret (used by Scenario Manager)
 
 **Negotiation Sim** environment variables:
 - `SESSION_SECRET` — Cookie signing secret
 - `OPENAI_API_KEY` — OpenAI API key (for AI counterpart)
 - `OPENAI_MODEL` — Model name (default: `gpt-4o-mini`)
-- `TOOL_SSO_SECRET` — Must match DecisionLab's value
+- `TOOL_SSO_SECRET` — Must match DecisionLab's `TOOL_SSO_SECRET`
+
+**Scenario Manager** environment variables:
+- `TOOL_SSO_SECRET_SCENARIO_SIM` — Must match DecisionLab's `TOOL_SSO_SECRET_SCENARIO_SIM`
 
 ### Manual Docker
 

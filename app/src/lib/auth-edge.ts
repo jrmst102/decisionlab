@@ -45,9 +45,11 @@ export async function createToolSSOToken(
   role: string,
   toolSlug: string
 ): Promise<string> {
-  const TOOL_SECRET = new TextEncoder().encode(
-    process.env.TOOL_SSO_SECRET || "tool-sso-secret-change-me"
-  );
+  // Check for a tool-specific secret first (e.g. TOOL_SSO_SECRET_SCENARIO_SIM),
+  // then fall back to the shared TOOL_SSO_SECRET.
+  const envKey = `TOOL_SSO_SECRET_${toolSlug.toUpperCase().replace(/-/g, "_")}`;
+  const secret = process.env[envKey] || process.env.TOOL_SSO_SECRET || "tool-sso-secret-change-me";
+  const TOOL_SECRET = new TextEncoder().encode(secret);
   return new SignJWT({ userId, email, role, tool: toolSlug })
     .setProtectedHeader({ alg: "HS256" })
     .setIssuedAt()

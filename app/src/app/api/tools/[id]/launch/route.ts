@@ -26,7 +26,7 @@ export async function POST(
   );
 
   // Only append SSO token for internal tools that support it
-  const SSO_ENABLED_SLUGS = new Set(["negotiation-sim"]);
+  const SSO_ENABLED_SLUGS = new Set(["negotiation-sim", "scenario-sim"]);
 
   let launchUrl: string;
   if (SSO_ENABLED_SLUGS.has(tool.slug)) {

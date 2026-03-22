@@ -1,3 +1,6 @@
 [submodule "services/negotiationsim"]
 	path = services/negotiationsim
 	url = git@github.com:jrmst102/negotiationsim.git
+[submodule "services/scenariomanager"]
+	path = services/scenariomanager
+	url = git@github.com:jrmst102/scenariomanager.git

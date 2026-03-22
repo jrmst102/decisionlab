@@ -57,13 +57,13 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
   {
     name: "Scenario Sim",
     slug: "scenario-sim",
-    url: "",
+    url: "https://scenariomanager-placeholder.ondigitalocean.app",
     description:
       "Develop, analyze, and compare future scenarios for strategic decision making under uncertainty.",
-    authMethod: "TBD",
+    authMethod: "REDIRECT",
     icon: "GitBranch",
     color: "#DC2626",
-    available: false,
+    available: true,
   },
   {
     name: "Decision Trees",
