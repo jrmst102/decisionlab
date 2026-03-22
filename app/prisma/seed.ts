@@ -153,7 +153,13 @@ async function main() {
   for (const tool of toolData) {
     const created = await prisma.tool.upsert({
       where: { slug: tool.slug },
-      update: { url: tool.url, description: tool.description },
+      update: {
+        url: tool.url,
+        description: tool.description,
+        isActive: tool.isActive ?? true,
+        authMethod: tool.authMethod,
+        sortOrder: tool.sortOrder,
+      },
       create: tool,
     });
     console.log(
