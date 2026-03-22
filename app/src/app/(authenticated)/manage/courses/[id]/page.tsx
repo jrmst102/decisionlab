@@ -52,6 +52,13 @@ export default async function CourseDetailPage({
     redirect("/manage/courses");
   }
 
+  const allTools = await prisma.tool.findMany({
+    select: { id: true, name: true, slug: true, isActive: true },
+    orderBy: { sortOrder: "asc" },
+  });
+
+  const assignedToolIds = course.toolAssignments.map((a) => a.toolId);
+
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       {/* Back link */}
@@ -142,41 +149,14 @@ export default async function CourseDetailPage({
         <div className="bg-white rounded-xl border border-nyu-border p-6">
           <h2 className="text-lg font-semibold text-nyu-black mb-4 flex items-center gap-2">
             <BookOpen className="h-5 w-5 text-nyu-violet" />
-            Assigned Tools ({course.toolAssignments.length})
+            Assigned Tools
           </h2>
 
-          {course.toolAssignments.length === 0 ? (
-            <p className="text-sm text-nyu-gray py-4">
-              No tools assigned yet.
-            </p>
-          ) : (
-            <div className="divide-y divide-nyu-border">
-              {course.toolAssignments.map((assignment) => (
-                <div
-                  key={assignment.id}
-                  className="py-3 flex items-center justify-between"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-nyu-black">
-                      {assignment.tool.name}
-                    </p>
-                    <p className="text-xs text-nyu-gray">
-                      {assignment.tool.url || "URL not set"}
-                    </p>
-                  </div>
-                  <span
-                    className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                      assignment.tool.isActive
-                        ? "bg-green-100 text-green-700"
-                        : "bg-gray-100 text-gray-500"
-                    }`}
-                  >
-                    {assignment.tool.isActive ? "Active" : "Coming Soon"}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+          <CourseToolEditor
+            courseId={course.id}
+            allTools={allTools}
+            assignedToolIds={assignedToolIds}
+          />
         </div>
       </div>
     </div>
