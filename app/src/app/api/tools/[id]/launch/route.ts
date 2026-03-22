@@ -25,13 +25,21 @@ export async function POST(
     tool.slug
   );
 
-  // Append SSO token to the tool URL so the receiving app can auto-authenticate
-  const launchUrl = new URL(tool.url);
-  launchUrl.pathname = "/auth/sso";
-  launchUrl.searchParams.set("token", ssoToken);
+  // Only append SSO token for internal tools that support it
+  const SSO_ENABLED_SLUGS = new Set(["negotiation-sim"]);
+
+  let launchUrl: string;
+  if (SSO_ENABLED_SLUGS.has(tool.slug)) {
+    const url = new URL(tool.url);
+    url.pathname = "/auth/sso";
+    url.searchParams.set("token", ssoToken);
+    launchUrl = url.toString();
+  } else {
+    launchUrl = tool.url;
+  }
 
   return NextResponse.json({
-    launchUrl: launchUrl.toString(),
+    launchUrl,
     authMethod: tool.authMethod,
     toolUrl: tool.url,
   });
