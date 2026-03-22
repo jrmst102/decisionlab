@@ -8,7 +8,7 @@ const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL!,
   ssl: { rejectUnauthorized: false },
 });
-const adapter = new PrismaPg(pool);
+const adapter = new PrismaPg(pool as unknown as ConstructorParameters<typeof PrismaPg>[0]);
 const prisma = new PrismaClient({ adapter });
 
 // Classlist data
