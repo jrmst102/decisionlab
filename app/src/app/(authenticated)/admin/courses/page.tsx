@@ -443,31 +443,3 @@ export default function AdminCoursesPage() {
     </div>
   );
 }
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <span className="text-xs text-nyu-gray">
-                      {course._count.enrollments} students
-                    </span>
-                    <span className="text-xs text-nyu-gray">
-                      Prof. {course.professor.lastName}
-                    </span>
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                        course.isActive
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-100 text-gray-500"
-                      }`}
-                    >
-                      {course.isActive ? "Active" : "Archived"}
-                    </span>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-}

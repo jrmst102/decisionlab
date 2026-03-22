@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Users, BookOpen, Calendar, GraduationCap } from "lucide-react";
 import CourseToolEditor from "@/components/CourseToolEditor";
+import CourseEnrollmentEditor from "@/components/CourseEnrollmentEditor";
 
 export default async function CourseDetailPage({
   params,
@@ -117,32 +118,16 @@ export default async function CourseDetailPage({
         <div className="bg-white rounded-xl border border-nyu-border p-6">
           <h2 className="text-lg font-semibold text-nyu-black mb-4 flex items-center gap-2">
             <Users className="h-5 w-5 text-nyu-violet" />
-            Enrolled Students ({course.enrollments.length})
+            Enrolled Students
           </h2>
 
-          {course.enrollments.length === 0 ? (
-            <p className="text-sm text-nyu-gray py-4">
-              No students enrolled yet.
-            </p>
-          ) : (
-            <div className="divide-y divide-nyu-border">
-              {course.enrollments.map((enrollment) => (
-                <div
-                  key={enrollment.id}
-                  className="py-3 flex items-center justify-between"
-                >
-                  <div>
-                    <p className="text-sm font-medium text-nyu-black">
-                      {enrollment.user.lastName}, {enrollment.user.firstName}
-                    </p>
-                    <p className="text-xs text-nyu-gray">
-                      {enrollment.user.email}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+          <CourseEnrollmentEditor
+            courseId={course.id}
+            enrollments={course.enrollments.map((e) => ({
+              id: e.id,
+              user: e.user,
+            }))}
+          />
         </div>
 
         {/* Assigned Tools */}
