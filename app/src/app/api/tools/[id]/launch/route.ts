@@ -25,12 +25,13 @@ export async function POST(
     tool.slug
   );
 
-  // Build launch URL based on auth method
-  // For now, just forward to the tool's base URL until SSO is enabled on each tool
-  const launchUrl = tool.url;
+  // Append SSO token to the tool URL so the receiving app can auto-authenticate
+  const launchUrl = new URL(tool.url);
+  launchUrl.pathname = "/auth/sso";
+  launchUrl.searchParams.set("token", ssoToken);
 
   return NextResponse.json({
-    launchUrl,
+    launchUrl: launchUrl.toString(),
     authMethod: tool.authMethod,
     toolUrl: tool.url,
   });
