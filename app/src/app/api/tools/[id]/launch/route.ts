@@ -18,24 +18,29 @@ export async function POST(
     return NextResponse.json({ error: "Tool not found" }, { status: 404 });
   }
 
-  const ssoToken = await createToolSSOToken(
-    session.userId,
-    session.email,
-    session.role,
-    tool.slug,
-    session.firstName,
-    session.lastName
-  );
-
   // Only append SSO token for internal tools that support it
   const SSO_ENABLED_SLUGS = new Set(["negotiation-sim", "scenario-sim", "ahp-studio"]);
 
   let launchUrl: string;
   if (SSO_ENABLED_SLUGS.has(tool.slug)) {
-    const url = new URL(tool.url);
-    url.pathname = "/auth/sso";
-    url.searchParams.set("token", ssoToken);
-    launchUrl = url.toString();
+    try {
+      const ssoToken = await createToolSSOToken(
+        session.userId,
+        session.email,
+        session.role,
+        tool.slug,
+        session.firstName,
+        session.lastName
+      );
+      const url = new URL(tool.url);
+      url.pathname = "/auth/sso";
+      url.searchParams.set("token", ssoToken);
+      launchUrl = url.toString();
+    } catch (err) {
+      console.error(`SSO token error for ${tool.slug}:`, err);
+      // Fall back to plain URL so the tool still opens
+      launchUrl = tool.url;
+    }
   } else {
     launchUrl = tool.url;
   }

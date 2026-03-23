@@ -38,6 +38,7 @@ interface ToolCardProps {
 
 export default function ToolCard({ tool }: ToolCardProps) {
   const [launching, setLaunching] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Map tool slugs to icons and colors
   const iconConfig: Record<string, { icon: string; color: string }> = {
@@ -56,6 +57,7 @@ export default function ToolCard({ tool }: ToolCardProps) {
   const handleLaunch = async () => {
     if (!isAvailable || launching) return;
     setLaunching(true);
+    setError(null);
 
     try {
       const res = await fetch(`/api/tools/${tool.id}/launch`, {
@@ -63,13 +65,14 @@ export default function ToolCard({ tool }: ToolCardProps) {
       });
 
       if (!res.ok) {
-        throw new Error("Failed to launch tool");
+        throw new Error(`Launch failed (${res.status})`);
       }
 
       const data = await res.json();
       window.open(data.launchUrl, "_blank", "noopener,noreferrer");
     } catch (err) {
       console.error("Launch error:", err);
+      setError("Failed to launch. Try again.");
     } finally {
       setLaunching(false);
     }
@@ -124,6 +127,11 @@ export default function ToolCard({ tool }: ToolCardProps) {
         <div className="absolute inset-0 bg-white/80 rounded-xl flex items-center justify-center">
           <div className="w-6 h-6 border-2 border-nyu-violet border-t-transparent rounded-full animate-spin" />
         </div>
+      )}
+
+      {/* Error message */}
+      {error && (
+        <div className="mt-2 text-xs text-red-600 font-medium">{error}</div>
       )}
     </button>
   );
