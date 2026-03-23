@@ -22,11 +22,13 @@ export async function POST(
     session.userId,
     session.email,
     session.role,
-    tool.slug
+    tool.slug,
+    session.firstName,
+    session.lastName
   );
 
   // Only append SSO token for internal tools that support it
-  const SSO_ENABLED_SLUGS = new Set(["negotiation-sim", "scenario-sim"]);
+  const SSO_ENABLED_SLUGS = new Set(["negotiation-sim", "scenario-sim", "ahp-studio"]);
 
   let launchUrl: string;
   if (SSO_ENABLED_SLUGS.has(tool.slug)) {

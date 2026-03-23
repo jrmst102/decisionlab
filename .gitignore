@@ -5,3 +5,8 @@ docs/pricing.csv
 .ssh/
 negotiations
 negotiations.pub
+
+# SSO key pair (private key MUST NOT be committed)
+ahp-studio-sso
+ahp-studio-sso.pub
+ahp-studio-sso-public.pem

@@ -4,3 +4,6 @@
 [submodule "services/scenariomanager"]
 	path = services/scenariomanager
 	url = git@github.com:jrmst102/scenariomanager.git
+[submodule "services/ahpstudio"]
+	path = services/ahpstudio
+	url = git@github.com:jrmst102/ahpstudio.git

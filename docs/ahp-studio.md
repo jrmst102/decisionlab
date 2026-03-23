@@ -31,6 +31,7 @@ AHP Studio is a web-based decision support application implementing the Analytic
 - **Local File Save** — Save `.AHP` files directly to your computer; upload them to resume later
 - **User Management** — Admin panel for user CRUD, account unlock, password reset
 - **Authentication** — JWT with httpOnly cookies, bcryptjs hashing, 3-attempt account lockout
+- **Decision Labs SSO** — Single sign-on from Decision Labs via JWT token exchange; automatic user provisioning by email; role mapping (ADMIN/PROFESSOR → admin, STUDENT → user)
 - **Information Pages** — About, What is AHP?, AHP in the Age of GenAI, Help, Terms and Conditions, Privacy Policy
 
 ## Technology Stack
@@ -130,11 +131,13 @@ No database server is required.
 | `OPENAI_FALLBACK_MODEL` | No | `gpt-4o-mini` | Fallback model on primary failure |
 | `OPENAI_TIMEOUT_MS` | No | `14000` | Per-call API request timeout (total budget hard-capped at 28s) |
 | `OPENAI_MAX_RETRIES` | No | `0` | Retries per model before fallback |
+| `DECISIONLAB_SSO_PUBLIC_KEY` | No | — | OpenSSH public key (`ssh-rsa ...`) for Decision Labs SSO token verification (RS256) |
 
 ## Version History
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.2.0 | 2026-03-23 | **Decision Labs SSO integration.** `GET /auth/sso` endpoint for JWT-based single sign-on from Decision Labs; auto-provisioning of SSO users by email; role mapping (PROFESSOR → admin); `DECISIONLAB_SSO_SECRET` env var; see [ahp-studio-sso-integration.md](ahp-studio-sso-integration.md) for full spec |
 | 1.1.9 | 2026-03-11 | **First stable release.** Fixed inverted comparison scale; participant link redirect fix (401 interceptor); admin self-participation with auto-status tracking; unified AI narrative (single box); AI consensus explanation; GPT model footnote; aggressive LLM timeouts for DigitalOcean App Platform (28s budget); deployment migrated to DigitalOcean App Platform |
 | 1.1.8 | 2026-03-10 | UX: Question-based comparison framing, visual hierarchy map, step-based navigation; deployment updated to DigitalOcean Droplet with GitHub Actions CI/CD |
 | 1.1.7 | 2026-03-10 | Version display on login screen and footer; rebuilt client to fix participation link login redirect |
@@ -147,7 +150,7 @@ No database server is required.
 
 | Group | Endpoints |
 |-------|-----------|
-| **Auth** | `POST /api/v1/auth/login`, `POST /auth/logout`, `GET /auth/me`, `POST /auth/change-password` |
+| **Auth** | `POST /api/v1/auth/login`, `POST /auth/logout`, `GET /auth/me`, `POST /auth/change-password`, `GET /auth/sso` (Decision Labs SSO) |
 | **Problems** | `GET/POST /api/v1/problems`, `GET/PUT/DELETE /problems/:id`, `POST /problems/:id/save`, `GET /problems/:id/download`, `POST /problems/upload` |
 | **Participants** | `GET/POST /api/v1/problems/:id/participants`, `PUT/DELETE /problems/:id/participants/:pid`, `POST /problems/:id/participants/:pid/regenerate-pin` |
 | **Config & Rounds** | `PUT /api/v1/problems/:id/config`, `POST /problems/:id/round/close`, `POST /round/reopen`, `POST /round/new`, `POST /problems/:id/finalize` |
