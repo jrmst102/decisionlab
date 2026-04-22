@@ -47,8 +47,8 @@ const classlist = [
   { firstName: "Vanessa Cibelle", lastName: "Moura Caxias", email: "vm2806@nyu.edu", password: "CoralCheetah3", role: "STUDENT" as const },
   { firstName: "Jiaying", lastName: "Pan", email: "jp7862@nyu.edu", password: "BeigeBadger4", role: "STUDENT" as const },
   { firstName: "Sasha", lastName: "Rachmadi", email: "sfr9778@nyu.edu", password: "CyanCobra5", role: "STUDENT" as const },
-  { firstName: "Lanie", lastName: "Veazey", email: "lmv9494@nyu.edu", password: "OliveOcelot7", role: "STUDENT" as const },
-  { firstName: "Senette", lastName: "Wiah", email: "sw7168@nyu.edu", password: "MagentaMoose6", role: "STUDENT" as const },
+  { firstName: "Lanie", lastName: "Veazey", email: "lmv9494@nyu.edu", password: "MagentaMoose6", role: "STUDENT" as const },
+  { firstName: "Senette", lastName: "Wiah", email: "sw7168@nyu.edu", password: "OliveOcelot7", role: "STUDENT" as const },
   { firstName: "Fangyuan", lastName: "Zheng", email: "fz2481@nyu.edu", password: "PeachPython8", role: "STUDENT" as const },
   { firstName: "Haihua", lastName: "Zhu", email: "hz4386@nyu.edu", password: "RubyRhino9", role: "STUDENT" as const },
 ];
