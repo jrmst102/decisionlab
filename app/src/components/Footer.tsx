@@ -3,20 +3,35 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="bg-nyu-dark-violet text-white mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-white/70">
-            &copy; 2026 by{" "}
+      <div className="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-10">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+          <div>
+            <p className="text-sm font-bold text-white">Decision Making Lab</p>
+            <p className="mt-2 max-w-md text-sm leading-6 text-white/60">
+              Open learning tools for clearer thinking, stronger strategy, and
+              better decisions.
+            </p>
+            <p className="mt-4 text-xs text-white/50">
+              &copy; 2026{" "}
+              <a
+                href="https://www.jose-mendoza.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-white/90 hover:text-white transition-colors"
+              >
+                Dr. Jose Mendoza
+              </a>
+            </p>
+          </div>
+          <nav className="flex flex-wrap items-center gap-x-5 gap-y-3 text-xs font-semibold" aria-label="Footer navigation">
             <a
-              href="https://www.jose-mendoza.com"
+              href="https://github.com/jrmst102/decisionlab"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-white/90 hover:text-white transition-colors"
+              className="text-white/70 hover:text-white transition-colors"
             >
-              Dr. Jose Mendoza
+              GitHub
             </a>
-          </p>
-          <nav className="flex flex-wrap items-center gap-4 text-sm">
             <Link
               href="/terms"
               className="text-white/70 hover:text-white transition-colors"

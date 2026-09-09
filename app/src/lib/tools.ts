@@ -7,6 +7,8 @@ export interface ToolDefinition {
   icon: string;
   color: string;
   available: boolean;
+  repositoryUrl: string;
+  category: string;
 }
 
 export const TOOL_DEFINITIONS: ToolDefinition[] = [
@@ -20,6 +22,8 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     icon: "Scale",
     color: "#57068C",
     available: true,
+    repositoryUrl: "https://github.com/jrmst102/ahpstudio",
+    category: "Decision analysis",
   },
   {
     name: "Airlines Sim",
@@ -31,6 +35,8 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     icon: "Plane",
     color: "#0369A1",
     available: true,
+    repositoryUrl: "https://github.com/jrmst102/airline_sim",
+    category: "Competitive strategy",
   },
   {
     name: "Dynamic Pricing Sandbox",
@@ -42,6 +48,8 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     icon: "TrendingUp",
     color: "#059669",
     available: true,
+    repositoryUrl: "https://github.com/jrmst102/dynamic_sandbox",
+    category: "Pricing strategy",
   },
   {
     name: "Negotiation Sim",
@@ -53,6 +61,8 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     icon: "Handshake",
     color: "#D97706",
     available: true,
+    repositoryUrl: "https://github.com/jrmst102/negotiationsim",
+    category: "Negotiation",
   },
   {
     name: "Scenario Sim",
@@ -64,6 +74,8 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     icon: "GitBranch",
     color: "#DC2626",
     available: true,
+    repositoryUrl: "https://github.com/jrmst102/scenariomanager",
+    category: "Scenario planning",
   },
   {
     name: "Decision Trees",
@@ -75,5 +87,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     icon: "Network",
     color: "#7C3AED",
     available: false,
+    repositoryUrl: "",
+    category: "Decision analysis",
   },
 ];

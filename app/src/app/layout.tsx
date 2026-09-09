@@ -9,9 +9,12 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Decision Making Lab",
+  title: {
+    default: "Decision Making Lab | NYU",
+    template: "%s | Decision Making Lab",
+  },
   description:
-    "A unified portal for decision-making and strategy simulation tools. Built for Competitive Strategy courses.",
+    "Open, interactive tools for decision analysis, pricing, competitive strategy, negotiation, and scenario planning.",
 };
 
 export default function RootLayout({

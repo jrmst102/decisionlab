@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifyToken } from "@/lib/auth-edge";
 
 const publicPaths = [
+  "/",
   "/login",
   "/api/auth/login",
   "/api/auth/refresh",
@@ -12,7 +13,7 @@ const publicPaths = [
   "/contact",
 ];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow public paths and static assets
@@ -30,7 +31,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   const payload = await verifyToken(token);
@@ -38,7 +39,7 @@ export async function middleware(request: NextRequest) {
     if (pathname.startsWith("/api/")) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-    const response = NextResponse.redirect(new URL("/login", request.url));
+    const response = NextResponse.redirect(new URL("/", request.url));
     response.cookies.delete("access_token");
     response.cookies.delete("refresh_token");
     return response;

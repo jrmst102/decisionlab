@@ -1,222 +1,150 @@
 # Decision Making Lab
 
-A web portal providing unified access to decision-making and strategy simulation tools for academic courses. Built for NYU School of Professional Studies by [Dr. Jose Mendoza](https://www.jose-mendoza.com).
+An open collection of interactive decision-making and strategy tools built for
+the NYU School of Professional Studies by
+[Dr. Jose Mendoza](https://www.jose-mendoza.com).
 
-## Overview
+The portal is publicly accessible at its root URL. Visitors can launch any live
+lab or inspect its source code without creating an account or entering a
+username and password.
 
-The Decision Making Lab consolidates six simulation tools under one platform with role-based access control, course management, and centralized tool launching.
+## Lab Collection
 
-### Lab Tools
+| Lab | Focus | Application | Source |
+| --- | --- | --- | --- |
+| AHP Studio | Multi-criteria decision analysis | [Open app](https://ahpstudio.com) | [GitHub](https://github.com/jrmst102/ahpstudio) |
+| Airlines Sim | Competitive airline strategy | [Open app](https://airlines-sim.com) | [GitHub](https://github.com/jrmst102/airline_sim) |
+| Dynamic Pricing Sandbox | Dynamic pricing strategy | [Open app](https://pricingsandbox.com) | [GitHub](https://github.com/jrmst102/dynamic_sandbox) |
+| Negotiation Sim | AI-supported negotiation practice | [Open app](https://negotiationsim-lofem.ondigitalocean.app) | [GitHub](https://github.com/jrmst102/negotiationsim) |
+| Scenario Sim | Scenario planning under uncertainty | [Open app](https://scenariomanager-6m53a.ondigitalocean.app) | [GitHub](https://github.com/jrmst102/scenariomanager) |
 
-| Tool | Status | Description |
-|------|--------|-------------|
-| AHP Studio | Active | Analytic Hierarchy Process decision tool |
-| Airlines Sim | Active | Airline industry simulation |
-| Dynamic Pricing Sandbox | Active | Dynamic pricing strategy tool |
-| Negotiation Sim | Active | AI-powered negotiation simulation (FastAPI) |
-| Scenario Sim | Active | Scenario planning tool (FastAPI) |
-| Decision Trees | Coming Soon | Decision tree analysis |
-
-### User Roles
-
-- **Admin** — Full platform management: users, courses, schools, tools
-- **Professor** — Course management, student enrollment, tool assignment
-- **Student** — Access assigned tools, view enrolled courses
-
-## Tech Stack
-
-- **Framework:** Next.js 16 (App Router, TypeScript)
-- **Database:** PostgreSQL 16 with Prisma 7 ORM
-- **Auth:** JWT (jose library), bcryptjs password hashing, httpOnly cookies
-- **Styling:** Tailwind CSS v4, NYU brand palette (Violet #57068C)
-- **Icons:** Lucide React
-- **Deployment:** DigitalOcean App Platform (Docker)
-
-## Project Structure
-
-```
-app/                             # DecisionLab portal (Next.js)
-├── prisma/                      # Schema, migrations, seed script
-├── src/
-│   ├── app/                     # Next.js App Router pages & API routes
-│   │   ├── (authenticated)/     # Protected pages (dashboard, admin, courses, etc.)
-│   │   ├── api/                 # REST API endpoints
-│   │   └── *.tsx                # Public pages (login, about, terms, etc.)
-│   ├── components/              # Shared UI components
-│   ├── generated/prisma/        # Generated Prisma client
-│   └── lib/                     # Auth, DB client, tool definitions
-├── Dockerfile                   # Multi-stage Docker build
-└── docker-compose.yml           # Local development with Docker
-services/
-├── negotiationsim/              # Negotiation Sim (git submodule → jrmst102/negotiationsim)
-└── scenariomanager/             # Scenario Manager (git submodule → jrmst102/scenariomanager)
-.do/app.yaml                     # DigitalOcean App Platform spec
-start.py                         # Local dev startup (both services)
-```
-
-## Getting Started
-
-### Quick Start
-
-```bash
-python3 start.py
-```
-
-This handles everything: starts PostgreSQL (Docker), installs dependencies for both DecisionLab and Negotiation Sim, runs migrations, seeds demo data, and launches both services:
-- **DecisionLab** → http://localhost:3000
-- **Negotiation Sim** → http://localhost:8080
-
-### Manual Setup
-
-#### Prerequisites
-
-- Node.js 20+
-- PostgreSQL 16 (or Docker)
-
-#### Steps
-
-1. **Clone and install:**
-   ```bash
-   cd app
-   npm install
-   ```
-
-2. **Set up environment:**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your DATABASE_URL and JWT_SECRET
-   ```
-
-3. **Start PostgreSQL** (via Docker):
-   ```bash
-   docker run -d --name decisionlab-db \
-     -e POSTGRES_USER=decisionlab \
-     -e POSTGRES_PASSWORD=decisionlab2026 \
-     -e POSTGRES_DB=decisionlab \
-     -p 5433:5432 postgres:16-alpine
-   ```
-
-4. **Run migrations and seed:**
-   ```bash
-   npx prisma migrate dev
-   npx tsx prisma/seed.ts
-   ```
-
-5. **Start dev server:**
-   ```bash
-   npm run dev
-   ```
-
-6. **Open** http://localhost:3000
-
-### Demo Credentials
-
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | jm10697@nyu.edu | LimeKoala1! |
-| Professor | josermendoza@icloud.com | LimeKoala1! |
-| Students | See `docs/classlist.csv` | Per classlist |
-
-### Docker Compose (Full Stack)
-
-```bash
-cd app
-docker compose up --build
-```
+Decision Trees is planned as a future addition. The portal itself is also
+[available on GitHub](https://github.com/jrmst102/decisionlab).
 
 ## Features
 
-### Admin Dashboard (`/admin`)
-- **Users** — Create, edit (name, email, password, role), activate/deactivate
-- **Courses** — Create, edit, delete courses
-- **Schools** — Add and remove schools
-- **Tools** — Manage simulation tools
+- Public, login-free access to the complete live lab collection
+- Direct application and GitHub repository links on every lab card
+- Responsive, accessible interface for desktop and mobile devices
+- NYU Violet, approved supporting colors, and Montserrat/Verdana typography
+- Official responsive NYU logo assets with unmodified proportions
+- MIT-licensed portal and applications
+- Protected legacy administration and course-management routes
 
-### Course Management (`/manage/courses/[id]`)
-- View course details (code, school, semester, professor)
-- Add/remove students with search
-- Assign/unassign tools via checkbox editor
+## NYU Brand System
 
-### Student Experience (`/dashboard`)
-- View enrolled courses
-- Launch assigned tools
-- Profile management
+The interface follows NYU visual identity guidance:
 
-## API Endpoints
+- NYU Violet: `#57068C`
+- Deep Violet: `#330662`
+- Ultra Violet: `#8900E1`, used sparingly
+- Light Violet and neutral colors for supporting surfaces
+- Montserrat with Verdana and system sans-serif fallbacks
+- Official long and short NYU logo artwork from [`docs/logos`](docs/logos)
 
-| Method | Path | Description |
-|--------|------|-------------|
-| POST | `/api/auth/login` | Email/password login |
-| POST | `/api/auth/logout` | Clear session |
-| GET | `/api/auth/me` | Current user info |
-| GET/POST | `/api/users` | List/create users (admin) |
-| GET/PUT/DELETE | `/api/users/[id]` | User CRUD |
-| GET/POST | `/api/courses` | List/create courses |
-| GET/PUT/DELETE | `/api/courses/[id]` | Course CRUD |
-| POST/DELETE | `/api/courses/[id]/enroll` | Add/remove students |
-| POST | `/api/courses/[id]/tools` | Assign tools to course |
-| GET/POST | `/api/schools` | List/create schools (admin) |
-| DELETE | `/api/schools/[id]` | Delete school (admin) |
-| GET | `/api/tools` | List all active tools |
-| GET | `/api/tools/assigned` | User's assigned tools |
-| POST | `/api/tools/[id]/launch` | Generate launch URL |
+The logo artwork is displayed without recoloring, rearranging, distortion, or
+additional lockups.
 
-## Deployment
+## Tech Stack
 
-### DigitalOcean App Platform
+- Next.js 16 App Router and TypeScript
+- React 19
+- Tailwind CSS 4
+- Lucide React icons
+- PostgreSQL 16 and Prisma 7 for protected management features
+- JWT cookies for protected administrative routes
+- Docker and DigitalOcean App Platform deployment
 
-The platform runs as three App Platform apps:
+## Project Structure
 
-| App | Repo | Runtime |
-|-----|------|---------|
-| DecisionLab | `jrmst102/decisionlab` (source: `/app`) | Next.js / Docker |
-| Negotiation Sim | `jrmst102/negotiationsim` | FastAPI / Python buildpack |
-| Scenario Manager | `jrmst102/scenariomanager` | FastAPI / Docker |
+```text
+app/                            # Decision Making Lab portal
+├── public/                     # Static assets, including NYU web logos
+├── prisma/                     # Database schema, migrations, and seed data
+└── src/
+    ├── app/
+    │   ├── page.tsx            # Public lab directory
+    │   ├── (authenticated)/    # Protected management/course pages
+    │   └── api/                # Internal API routes
+    ├── components/             # Shared interface components
+    ├── lib/                    # Tool definitions, auth, and database access
+    └── proxy.ts                # Public/protected route boundary
+docs/
+├── logos/                      # Original supplied NYU logo files
+└── *.md                        # Product and integration documentation
+services/                       # Application git submodules
+```
 
-**DecisionLab** environment variables:
-- `DATABASE_URL` — Managed PostgreSQL connection string
-- `JWT_SECRET` — Strong random secret
-- `TOOL_SSO_SECRET` — Shared SSO secret (used by Negotiation Sim)
-- `TOOL_SSO_SECRET_SCENARIO_SIM` — Per-tool SSO secret (used by Scenario Manager)
+## Local Development
 
-**Negotiation Sim** environment variables:
-- `SESSION_SECRET` — Cookie signing secret
-- `OPENAI_API_KEY` — OpenAI API key (for AI counterpart)
-- `OPENAI_MODEL` — Model name (default: `gpt-4o-mini`)
-- `TOOL_SSO_SECRET` — Must match DecisionLab's `TOOL_SSO_SECRET`
+### Requirements
 
-**Scenario Manager** environment variables:
-- `TOOL_SSO_SECRET_SCENARIO_SIM` — Must match DecisionLab's `TOOL_SSO_SECRET_SCENARIO_SIM`
+- Node.js 20 or newer
+- npm
 
-### Manual Docker
+### Run the public portal
+
+```bash
+git clone https://github.com/jrmst102/decisionlab.git
+cd decisionlab/app
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000). The public portal does not
+require a database or login credentials.
+
+### Production build
+
+Generate the Prisma client before creating a complete production build:
 
 ```bash
 cd app
-docker build -t decisionlab .
-docker run -p 3000:3000 \
-  -e DATABASE_URL="postgresql://..." \
-  -e JWT_SECRET="..." \
-  decisionlab
+npm install
+npm run db:generate
+npm run build
 ```
 
-## Scripts
+### Optional management environment
+
+Protected administration and course-management features additionally require a
+PostgreSQL database and the values documented in [`app/.env.example`](app/.env.example).
+
+```bash
+cd app
+cp .env.example .env
+npm run db:push
+npm run db:seed
+npm run dev
+```
+
+## Available Scripts
+
+Run these commands from `app/`:
 
 | Command | Description |
-|---------|-------------|
-| `python3 start.py` | Full setup & launch (recommended) |
-| `npm run dev` | Start dev server |
-| `npm run build` | Production build |
-| `npm start` | Start production server |
-| `npm run db:generate` | Regenerate Prisma client |
-| `npm run db:migrate` | Run database migrations |
-| `npm run db:push` | Push schema to DB (no migration) |
-| `npm run db:seed` | Seed demo data |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create an optimized production build |
+| `npm run start` | Start the production server |
+| `npm run lint` | Run ESLint |
+| `npm run db:generate` | Generate the Prisma client |
+| `npm run db:migrate` | Create and apply development migrations |
+| `npm run db:push` | Apply the schema without creating a migration |
+| `npm run db:seed` | Seed development data |
 | `npm run db:studio` | Open Prisma Studio |
+
+## Deployment
+
+The portal is configured for Docker-based deployment from the `app/` directory.
+See [`docs/digitalocean-deployment.md`](docs/digitalocean-deployment.md) for the
+DigitalOcean App Platform setup and service-specific environment variables.
 
 ## Contact
 
-Dr. Jose Mendoza — [jose.mendoza@nyu.edu](mailto:jose.mendoza@nyu.edu) — [www.jose-mendoza.com](https://www.jose-mendoza.com)
+Dr. Jose Mendoza — [jose.mendoza@nyu.edu](mailto:jose.mendoza@nyu.edu) —
+[www.jose-mendoza.com](https://www.jose-mendoza.com)
 
 ## License
 
-See [LICENSE](LICENSE) for details.
+This project is available under the [MIT License](LICENSE).
