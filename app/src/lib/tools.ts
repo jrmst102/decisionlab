@@ -17,7 +17,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     slug: "ahp-studio",
     url: "https://ahpstudio.com",
     description:
-      "Structured multi-criteria decision making through pairwise comparisons and priority analysis.",
+      "Compare criteria and alternatives using the Analytic Hierarchy Process.",
     authMethod: "JWT_EXCHANGE",
     icon: "Scale",
     color: "#57068C",
@@ -30,7 +30,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     slug: "airlines-sim",
     url: "https://airlines-sim.com",
     description:
-      "Competitive airline industry simulation — manage pricing, capacity, and strategy across rounds.",
+      "Manage pricing, capacity, and strategy in a competitive airline simulation.",
     authMethod: "REDIRECT",
     icon: "Plane",
     color: "#0369A1",
@@ -43,7 +43,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     slug: "dynamic-pricing",
     url: "https://pricingsandbox.com",
     description:
-      "Real-time dynamic pricing simulation across four progressively challenging industry scenarios.",
+      "Test dynamic pricing across four industry scenarios.",
     authMethod: "IFRAME",
     icon: "TrendingUp",
     color: "#059669",
@@ -56,7 +56,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     slug: "negotiation-sim",
     url: "https://negotiationsim-lofem.ondigitalocean.app",
     description:
-      "AI-powered negotiation simulation with structured rounds, scoring rubric, and class session mode.",
+      "Practice AI-powered negotiations with structured rounds and scoring.",
     authMethod: "REDIRECT",
     icon: "Handshake",
     color: "#D97706",
@@ -69,7 +69,7 @@ export const TOOL_DEFINITIONS: ToolDefinition[] = [
     slug: "scenario-sim",
     url: "https://scenariomanager-6m53a.ondigitalocean.app",
     description:
-      "Develop, analyze, and compare future scenarios for strategic decision making under uncertainty.",
+      "Develop and compare scenarios for decisions under uncertainty.",
     authMethod: "REDIRECT",
     icon: "GitBranch",
     color: "#DC2626",

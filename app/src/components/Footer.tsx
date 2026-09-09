@@ -8,8 +8,7 @@ export default function Footer() {
           <div>
             <p className="text-sm font-bold text-white">Decision Making Lab</p>
             <p className="mt-2 max-w-md text-sm leading-6 text-white/60">
-              Open learning tools for clearer thinking, stronger strategy, and
-              better decisions.
+              Open decision-making tools.
             </p>
             <p className="mt-4 text-xs text-white/50">
               &copy; 2026{" "}

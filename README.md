@@ -1,12 +1,7 @@
 # Decision Making Lab
 
-An open collection of interactive decision-making and strategy tools built for
-the NYU School of Professional Studies by
-[Dr. Jose Mendoza](https://www.jose-mendoza.com).
-
-The portal is publicly accessible at its root URL. Visitors can launch any live
-lab or inspect its source code without creating an account or entering a
-username and password.
+Open decision-making tools for the NYU School of Professional Studies, built by
+[Dr. Jose Mendoza](https://www.jose-mendoza.com). No account is required.
 
 ## Lab Collection
 
@@ -18,32 +13,26 @@ username and password.
 | Negotiation Sim | AI-supported negotiation practice | [Open app](https://negotiationsim-lofem.ondigitalocean.app) | [GitHub](https://github.com/jrmst102/negotiationsim) |
 | Scenario Sim | Scenario planning under uncertainty | [Open app](https://scenariomanager-6m53a.ondigitalocean.app) | [GitHub](https://github.com/jrmst102/scenariomanager) |
 
-Decision Trees is planned as a future addition. The portal itself is also
-[available on GitHub](https://github.com/jrmst102/decisionlab).
+Decision Trees is planned. [View the portal source](https://github.com/jrmst102/decisionlab).
 
 ## Features
 
-- Public, login-free access to the complete live lab collection
-- Direct application and GitHub repository links on every lab card
-- Responsive, accessible interface for desktop and mobile devices
-- NYU Violet, approved supporting colors, and Montserrat/Verdana typography
-- Official responsive NYU logo assets with unmodified proportions
-- MIT-licensed portal and applications
-- Protected legacy administration and course-management routes
+- No login required
+- Direct application and source links
+- Responsive, accessible interface
+- NYU colors, typography, and official logos
+- MIT-licensed projects
+- Protected administration routes
 
 ## NYU Brand System
 
-The interface follows NYU visual identity guidance:
+The interface uses:
 
 - NYU Violet: `#57068C`
 - Deep Violet: `#330662`
-- Ultra Violet: `#8900E1`, used sparingly
-- Light Violet and neutral colors for supporting surfaces
-- Montserrat with Verdana and system sans-serif fallbacks
-- Official long and short NYU logo artwork from [`docs/logos`](docs/logos)
-
-The logo artwork is displayed without recoloring, rearranging, distortion, or
-additional lockups.
+- Ultra Violet: `#8900E1`
+- Montserrat with Verdana and system fallbacks
+- Official NYU logos from [`docs/logos`](docs/logos)
 
 ## Tech Stack
 
@@ -92,7 +81,7 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000). The public portal does not
-require a database or login credentials.
+require a database.
 
 ### Production build
 
